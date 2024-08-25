@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, {useState, useMemo} from 'react';
 import './App.css';
 
 function App() {
+  const [searchItem, setSearchItem] = useState('');
+
+  const items = useMemo(()=>[
+    'Apple',
+    'Banana',
+    'Cherry',
+    'Date',
+    'ElderBerry',
+    'Fig',
+    'Grape',
+  ], []);
+
+  const filteredItems = useMemo(()=>{
+    return items.filter(item => item.toLowerCase().includes(searchItem.toLowerCase()));
+  },[searchItem, items])
+
+  const handleSearch = (event) => {
+    setSearchItem(event.target.value);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="text" placeholder='Search Item...' value={searchItem} onChange={handleSearch}/>
+      <ul>
+        {filteredItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
